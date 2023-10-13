@@ -1,7 +1,7 @@
 export default function Home() {
   return (
     <main>
-      <div>Click me!</div>
+      <div>marketing</div>
     </main>
   );
 }
