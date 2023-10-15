@@ -116,6 +116,7 @@ export const Navigation = () => {
         <div
           onMouseDown={handleMouseDown}
           onClick={resetWidth}
+          onDoubleClick={collapse}
           className="group-hover/sidebar:opacity-100 cursor-ew-resize bg-primary/10 absolute top-0 right-0 w-1 h-full transition opacity-0"
         />
       </aside>
