@@ -2,8 +2,9 @@
 
 import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
 
-import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
+import { Id } from "@/convex/_generated/dataModel";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -63,6 +64,20 @@ export const Item = ({
           <span className="text-xs">⌘</span>K
         </kbd>
       )}
+    </div>
+  );
+};
+
+Item.Skeleton = function ItemSkeleton({ level }: { level?: number }) {
+  return (
+    <div
+      style={{
+        paddingLeft: level ? `${level * 12 + 25}px` : "12px",
+      }}
+      className="flex gap-x-2 py-[3px]"
+    >
+      <Skeleton className="w-4 h-4" />
+      <Skeleton className="w-[30%] h-4" />
     </div>
   );
 };
