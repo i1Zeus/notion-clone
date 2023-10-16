@@ -1,10 +1,14 @@
 "use client";
 
-import { ChevronDown, ChevronRight, LucideIcon } from "lucide-react";
+import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -30,6 +34,37 @@ export const Item = ({
   expanded,
   documentIcon,
 }: ItemProps) => {
+  const create = useMutation(api.documents.create);
+  const router = useRouter();
+
+  const handleExpand = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    onExpand?.();
+  };
+
+  const onCreate = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+
+    if (!id) return;
+
+    const promise = create({
+      title: "Untitled",
+      parentDocument: id,
+    }).then((id) => {
+      if (!expanded) onExpand?.();
+
+      // router.push(`/documents/${id}`);
+    });
+
+    toast.promise(promise, {
+      loading: "Creating a new note...",
+      success: "Note created!",
+      error: "Failed to create note",
+    });
+  };
+
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   return (
@@ -47,8 +82,8 @@ export const Item = ({
       {!!id && (
         <div
           role="button"
-          className="hover:bg-neutral-300 dark:bg-neutral-600 h-full rounded-sm"
-          onClick={() => {}}
+          className="hover:bg-neutral-300 dark:hover:bg-neutral-600 h-full rounded-sm"
+          onClick={handleExpand}
         >
           <ChevronIcon className="shrink-0 text-muted-foreground/50 w-4 h-4" />
         </div>
@@ -63,6 +98,17 @@ export const Item = ({
         <kbd className="ml-auto pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
           <span className="text-xs">⌘</span>K
         </kbd>
+      )}
+      {!!id && (
+        <div
+          role="button"
+          onClick={onCreate}
+          className="gap-x-2 flex items-center ml-auto"
+        >
+          <div className="group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600 h-full ml-auto rounded-sm opacity-0">
+            <Plus className="text-muted-foreground w-4 h-4" />
+          </div>
+        </div>
       )}
     </div>
   );
