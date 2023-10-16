@@ -1,14 +1,29 @@
 "use client";
 
-import { ChevronDown, ChevronRight, LucideIcon, Plus } from "lucide-react";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useUser } from "@clerk/clerk-react";
+import {
+  ChevronDown,
+  ChevronRight,
+  LucideIcon,
+  MoreHorizontal,
+  Plus,
+  Trash,
+} from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useRouter } from "next/navigation";
-import { toast } from "sonner";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+} from "@/components/ui/dropdown-menu";
 
 interface ItemProps {
   id?: Id<"documents">;
@@ -35,6 +50,7 @@ export const Item = ({
   documentIcon,
 }: ItemProps) => {
   const create = useMutation(api.documents.create);
+  const archive = useMutation(api.documents.archive);
   const router = useRouter();
 
   const handleExpand = (
@@ -65,7 +81,21 @@ export const Item = ({
     });
   };
 
+  const onArchive = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    event.stopPropagation();
+    if (!id) return;
+
+    const promise = archive({ id });
+
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive",
+    });
+  };
+
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
+  const { user } = useUser();
 
   return (
     <div
@@ -100,12 +130,37 @@ export const Item = ({
         </kbd>
       )}
       {!!id && (
-        <div
-          role="button"
-          onClick={onCreate}
-          className="gap-x-2 flex items-center ml-auto"
-        >
-          <div className="group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600 h-full ml-auto rounded-sm opacity-0">
+        <div className="gap-x-2 flex items-center ml-auto">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+              <div
+                role="button"
+                className="group-hover:opacity-100 hover:bg-neutral-300 hover:dark:bg-neutral-600 h-full ml-auto rounded-sm opacity-0"
+              >
+                <MoreHorizontal className="text-muted-foreground w-4 h-4" />
+              </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              className="w-16"
+              align="start"
+              side="right"
+              forceMount
+            >
+              <DropdownMenuItem onClick={onArchive}>
+                <Trash className="w-4 h-4 mr-2" />
+                Delete
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <div className="text-muted-foreground p-2 text-xs">
+                Last edited by {user?.fullName}
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <div
+            role="button"
+            onClick={onCreate}
+            className="group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600 h-full ml-auto rounded-sm opacity-0"
+          >
             <Plus className="text-muted-foreground w-4 h-4" />
           </div>
         </div>
