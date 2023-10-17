@@ -68,9 +68,9 @@ export const DocumentList = ({
             onClick={() => onRedirect(document._id)}
             label={document.title}
             icon={FileIcon}
-            level={level}
             documentIcon={document.icon}
-            active={params.id === document._id}
+            active={params.documentId === document._id}
+            level={level}
             onExpand={() => onExpand(document._id)}
             expanded={expanded[document._id]}
           />

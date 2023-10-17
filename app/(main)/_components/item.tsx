@@ -105,14 +105,14 @@ export const Item = ({
         paddingLeft: level ? `${level * 12 + 12}px` : "12px",
       }}
       className={cn(
-        "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground",
+        "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
         active && "bg-primary/5 text-primary"
       )}
     >
       {!!id && (
         <div
           role="button"
-          className="hover:bg-neutral-300 dark:hover:bg-neutral-600 h-full rounded-sm"
+          className="hover:bg-neutral-300 dark:hover:bg-neutral-600 h-full mr-1 rounded-sm"
           onClick={handleExpand}
         >
           <ChevronIcon className="shrink-0 text-muted-foreground/50 w-4 h-4" />
@@ -121,7 +121,7 @@ export const Item = ({
       {documentIcon ? (
         <div className="shrink-0 mr-2 text-[18px]">{documentIcon}</div>
       ) : (
-        <Icon className="shrink-0 h-[18px] mr-2 text-muted-foreground" />
+        <Icon className="shrink-0 h-[18px] w-[18px] mr-2 text-muted-foreground" />
       )}
       <span className="truncate">{label}</span>
       {isSearch && (
@@ -132,16 +132,16 @@ export const Item = ({
       {!!id && (
         <div className="gap-x-2 flex items-center ml-auto">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+            <DropdownMenuTrigger onClick={(e) => e.stopPropagation()} asChild>
               <div
                 role="button"
-                className="group-hover:opacity-100 hover:bg-neutral-300 hover:dark:bg-neutral-600 h-full ml-auto rounded-sm opacity-0"
+                className="group-hover:opacity-100 hover:bg-neutral-300 dark:hover:bg-neutral-600 h-full ml-auto rounded-sm opacity-0"
               >
                 <MoreHorizontal className="text-muted-foreground w-4 h-4" />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent
-              className="w-16"
+              className="w-60"
               align="start"
               side="right"
               forceMount
@@ -152,7 +152,7 @@ export const Item = ({
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <div className="text-muted-foreground p-2 text-xs">
-                Last edited by {user?.fullName}
+                Last edited by: {user?.fullName}
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
