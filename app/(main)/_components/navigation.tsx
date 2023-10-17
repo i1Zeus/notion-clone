@@ -1,9 +1,9 @@
 "use client";
 
 import { toast } from "sonner";
-import { useMediaQuery } from "usehooks-ts";
-import { usePathname } from "next/navigation";
 import { useMutation } from "convex/react";
+import { useMediaQuery } from "usehooks-ts";
+import { useParams, usePathname } from "next/navigation";
 import {
   ChevronsLeft,
   MenuIcon,
@@ -28,10 +28,12 @@ import {
 import { TrashBox } from "./trash-box";
 import { useSearch } from "@/hooks/use-search";
 import { useSittings } from "@/hooks/use-settings";
+import { Navbar } from "./navbar";
 
 export const Navigation = () => {
   const search = useSearch();
   const settings = useSittings();
+  const params = useParams();
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
   const create = useMutation(api.documents.create);
@@ -178,15 +180,19 @@ export const Navigation = () => {
           isMobile && "left-0 w-full"
         )}
       >
-        <nav className="w-full px-3 py-2 bg-transparent">
-          {isCollapsed && (
-            <MenuIcon
-              className="text-muted-foreground w-6 h-6"
-              role="button"
-              onClick={resetWidth}
-            />
-          )}
-        </nav>
+        {!!params.documentId ? (
+          <Navbar isCollapsed={isCollapsed} onResetWidth={resetWidth} />
+        ) : (
+          <nav className="w-full px-3 py-2 bg-transparent">
+            {isCollapsed && (
+              <MenuIcon
+                className="text-muted-foreground w-6 h-6"
+                role="button"
+                onClick={resetWidth}
+              />
+            )}
+          </nav>
+        )}
       </div>
     </>
   );
