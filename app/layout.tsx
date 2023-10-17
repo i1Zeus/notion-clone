@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { ModalProvider } from "@/components/providers/modal-provider";
 import { ConvexProvider } from "@/components/providers/convex-provider";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -44,6 +45,7 @@ export default function RootLayout({
             disableTransitionOnChange={false}
           >
             <Toaster position="bottom-right" />
+            <ModalProvider />
             {children}
           </ThemeProvider>
         </ConvexProvider>
