@@ -230,7 +230,7 @@ export const update = mutation({
     if (!existingDocument) throw new Error("Document not found");
     if (existingDocument.userId !== userId) throw new Error("Unauthorized");
 
-    const document = await ctx.db.patch(id, rest);
+    const document = await ctx.db.patch(args.id, rest);
 
     return document;
   },
