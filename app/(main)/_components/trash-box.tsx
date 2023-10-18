@@ -86,7 +86,7 @@ export const TrashBox = () => {
             }}
             className="hover:bg-primary/5 text-primary flex items-center justify-between w-full text-sm rounded-sm"
           >
-            <span className="truncate">{document.title}</span>
+            <span className="ml-2 truncate">{document.title}</span>
             <div className="flex items-center">
               <div
                 role="button"
