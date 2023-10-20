@@ -1,12 +1,13 @@
 "use client";
 
 import { useMutation, useQuery } from "convex/react";
+import dynamic from "next/dynamic";
+import { useMemo } from "react";
 
-import Editor from "@/components/editor";
-import { Cover } from "@/components/cover";
 import { api } from "@/convex/_generated/api";
-import { Toolbar } from "@/components/toolbar";
 import { Id } from "@/convex/_generated/dataModel";
+import { Toolbar } from "@/components/toolbar";
+import { Cover } from "@/components/cover";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface DocumentIdPageProps {
@@ -16,6 +17,11 @@ interface DocumentIdPageProps {
 }
 
 const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
+  const Editor = useMemo(
+    () => dynamic(() => import("@/components/editor"), { ssr: false }),
+    []
+  );
+
   const document = useQuery(api.documents.getBayId, {
     documentId: params.documentId,
   });
@@ -29,7 +35,7 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
     });
   };
 
-  if (document === undefined)
+  if (document === undefined) {
     return (
       <div>
         <Cover.Skeleton />
@@ -37,12 +43,13 @@ const DocumentIdPage = ({ params }: DocumentIdPageProps) => {
           <div className="pt-4 pl-8 space-y-4">
             <Skeleton className="h-14 w-[50%]" />
             <Skeleton className="h-4 w-[80%]" />
-            <Skeleton className="h-14 w-[40%]" />
-            <Skeleton className="h-14 w-[60%]" />
+            <Skeleton className="h-4 w-[40%]" />
+            <Skeleton className="h-4 w-[60%]" />
           </div>
         </div>
       </div>
     );
+  }
 
   if (document === null) return <div>Not found</div>;
 
