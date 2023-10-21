@@ -58,7 +58,6 @@ export const Banner = ({ documentId }: BannerProps) => {
         <Button
           size="sm"
           variant="outline"
-          onClick={onRemove}
           className="hover:bg-primary/5 hover:text-white h-auto p-1 px-2 font-normal text-white bg-transparent border-white"
         >
           Delete for ever
