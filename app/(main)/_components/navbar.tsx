@@ -1,13 +1,15 @@
 "use client";
 
-import { api } from "@/convex/_generated/api";
-import { Id } from "@/convex/_generated/dataModel";
-import { useQuery } from "convex/react";
 import { MenuIcon } from "lucide-react";
-import { redirect, useParams } from "next/navigation";
+import { useQuery } from "convex/react";
+import { useParams } from "next/navigation";
+
+import { Menu } from "./menu";
 import { Title } from "./title";
 import { Banner } from "./banner";
-import { Menu } from "./menu";
+import { Publish } from "./publish";
+import { api } from "@/convex/_generated/api";
+import { Id } from "@/convex/_generated/dataModel";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -46,6 +48,7 @@ export const Navbar = ({ isCollapsed, onResetWidth }: NavbarProps) => {
         <div className="flex items-center justify-between w-full">
           <Title initialData={document} />
           <div className="gap-x-2 flex items-center">
+            <Publish initialData={document} />
             <Menu documentId={document._id} />
           </div>
         </div>
